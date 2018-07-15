@@ -4,7 +4,6 @@ import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.io.LineNumberReader;
 import java.util.ArrayList;
 import java.util.Random;
 import java.util.Stack;
@@ -15,8 +14,13 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 public class Hangman implements KeyListener {
+	static String DisplayLine;
+	static String wordDisplayed = " ";
+	JLabel displayLabel = new JLabel();
+	ArrayList<Character> wordsOnScreen = new ArrayList<Character>();
+
 	public static void main(String[] args) throws IOException {
-	//	LineNumberReader lnr = new LineNumberReader(br);
+		// LineNumberReader lnr = new LineNumberReader(br);
 		String numberString = JOptionPane.showInputDialog("please input a number");
 		int number = Integer.parseInt(numberString);
 		ArrayList<String> words = new ArrayList<String>();
@@ -35,7 +39,7 @@ public class Hangman implements KeyListener {
 			while (line != null) {
 				line = br.readLine();
 				for (int i = 0; i < indexes.size(); i++) {
-					if (indexes.get(i) == lineNum) {	
+					if (indexes.get(i) == lineNum) {
 						words.add(line);
 					}
 				}
@@ -50,54 +54,74 @@ public class Hangman implements KeyListener {
 			e.printStackTrace();
 		}
 		h.putInStack(words, wordsReciever);
-		h.createUI();
-		String DisplayLine = wordsReciever.pop();
+		DisplayLine = wordsReciever.pop();
 		System.out.println(DisplayLine);
-		System.out.println(DisplayLine.substring(0, 1));
+		h.createUI();
 	}
+
 	public void sort(ArrayList<Integer> indexes) {
 		boolean swap = true;
 		while (swap) {
 			swap = false;
-			for (int i = 0; i <indexes.size() - 1; i++) {
+			for (int i = 0; i < indexes.size() - 1; i++) {
 				if (indexes.get(i) > indexes.get(i + 1)) {
 					int temp = indexes.get(i);
-					indexes.set(i, indexes.get(i+1));
+					indexes.set(i, indexes.get(i + 1));
 					indexes.set(i + 1, temp);
 					swap = true;
 				}
 			}
 		}
 	}
+
 	public void putInStack(ArrayList<String> words, Stack<String> wordsReciever) {
-		for (int i = 0; i< words.size(); i++) {
+		for (int i = 0; i < words.size(); i++) {
 			wordsReciever.push(words.get(i));
 		}
 	}
+
 	public void createUI() {
+		JOptionPane.showMessageDialog(null, "Guess some words");
 		JFrame gameFrame = new JFrame();
-		JPanel gamePanel = new JPanel();
-		JLabel gameLabel = new JLabel();
+		JPanel textHolder = new JPanel();
 		gameFrame.setVisible(true);
-		gameFrame.setSize(1000, 500);
-		gameFrame.add(gamePanel);
-		gameLabel.setText("Guess a letter");
-		gamePanel.add(gameLabel);
-		gamePanel.addKeyListener(this);
+		gameFrame.setSize(500, 250);
+		gameFrame.add(textHolder);
+		// wordLabel.setText();
+		textHolder.add(displayLabel);
+		gameFrame.addKeyListener(this);
 	}
+
 	@Override
 	public void keyTyped(KeyEvent e) {
 		// TODO Auto-generated method stub
-		
 	}
+
 	@Override
 	public void keyPressed(KeyEvent e) {
 		// TODO Auto-generated method stub
-		
+		for (int i = 0; i < DisplayLine.length(); i++) {
+			if (DisplayLine.charAt(i) == e.getKeyChar()) {
+				wordDisplayed = wordDisplayed + DisplayLine.charAt(i);
+				wordsOnScreen.add(DisplayLine.charAt(i));
+			}
+		}
+		displayLabel.setText(wordDisplayed);
+		for (int i = 0; i < wordsOnScreen.size(); i++) {
+			for (int j = 0; j < i; j++) {
+				if (wordsOnScreen.get(i).equals(wordsOnScreen.get(j))) {
+					wordsOnScreen.remove(i);
+				}
+			}
+		}
+		for (int i = 0; i < wordsOnScreen.size(); i++) {
+			System.out.println(wordsOnScreen.get(i));
+		}
 	}
+
 	@Override
 	public void keyReleased(KeyEvent e) {
 		// TODO Auto-generated method stub
-		
+
 	}
 }
