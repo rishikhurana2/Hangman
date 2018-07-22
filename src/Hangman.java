@@ -15,9 +15,9 @@ import javax.swing.JPanel;
 
 public class Hangman implements KeyListener {
 	static String DisplayLine;
-	static String wordDisplayed = " ";
-	JLabel displayLabel = new JLabel();
-	ArrayList<Character> wordsOnScreen = new ArrayList<Character>();
+	static Hangman h = new Hangman();
+	static String underScores = " ";
+	static ArrayList<Character> underScoresArray = new ArrayList<Character>();
 
 	public static void main(String[] args) throws IOException {
 		// LineNumberReader lnr = new LineNumberReader(br);
@@ -26,7 +26,6 @@ public class Hangman implements KeyListener {
 		ArrayList<String> words = new ArrayList<String>();
 		ArrayList<Integer> indexes = new ArrayList<Integer>();
 		Stack<String> wordsReciever = new Stack<String>();
-		Hangman h = new Hangman();
 		Random r = new Random();
 		for (int i = 0; i < number; i++) {
 			indexes.add(r.nextInt(2999));
@@ -56,6 +55,13 @@ public class Hangman implements KeyListener {
 		h.putInStack(words, wordsReciever);
 		DisplayLine = wordsReciever.pop();
 		System.out.println(DisplayLine);
+		int length = DisplayLine.length();
+		for (int i = 0; i < length; i++) {
+			underScoresArray.add('_');
+		}
+		for (int i = 0; i < underScoresArray.size(); i++) {
+			underScores += underScoresArray.get(i) + " ";
+		}
 		h.createUI();
 	}
 
@@ -84,11 +90,12 @@ public class Hangman implements KeyListener {
 		JOptionPane.showMessageDialog(null, "Guess some words");
 		JFrame gameFrame = new JFrame();
 		JPanel textHolder = new JPanel();
+		JLabel label = new JLabel();
+		label.setText(underScores);
 		gameFrame.setVisible(true);
 		gameFrame.setSize(500, 250);
 		gameFrame.add(textHolder);
-		// wordLabel.setText();
-		textHolder.add(displayLabel);
+		textHolder.add(label);
 		gameFrame.addKeyListener(this);
 	}
 
@@ -99,24 +106,7 @@ public class Hangman implements KeyListener {
 
 	@Override
 	public void keyPressed(KeyEvent e) {
-		// TODO Auto-generated method stub
-		for (int i = 0; i < DisplayLine.length(); i++) {
-			if (DisplayLine.charAt(i) == e.getKeyChar()) {
-				wordDisplayed = wordDisplayed + DisplayLine.charAt(i);
-				wordsOnScreen.add(DisplayLine.charAt(i));
-			}
-		}
-		displayLabel.setText(wordDisplayed);
-		for (int i = 0; i < wordsOnScreen.size(); i++) {
-			for (int j = 0; j < i; j++) {
-				if (wordsOnScreen.get(i).equals(wordsOnScreen.get(j))) {
-					wordsOnScreen.remove(i);
-				}
-			}
-		}
-		for (int i = 0; i < wordsOnScreen.size(); i++) {
-			System.out.println(wordsOnScreen.get(i));
-		}
+
 	}
 
 	@Override
