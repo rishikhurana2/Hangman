@@ -24,11 +24,11 @@ public class Hangman implements KeyListener {
 	JFrame gameFrame = new JFrame();
 	static String set = "";
 	static String newSet = "";
-	int lives = 10;
+	int lives = 15;
 
 	public static void main(String[] args) throws IOException {
 		// LineNumberReader lnr = new LineNumberReader(br);
-		String numberString = JOptionPane.showInputDialog("please input a number");
+		String numberString = JOptionPane.showInputDialog("please input a number for the amount of word you want to guess");
 		int number = Integer.parseInt(numberString);
 		ArrayList<String> words = new ArrayList<String>();
 		ArrayList<Integer> indexes = new ArrayList<Integer>();
@@ -98,7 +98,7 @@ public class Hangman implements KeyListener {
 	}
 
 	public void createUI() {
-		JOptionPane.showMessageDialog(null, "Guess some words");
+		JOptionPane.showMessageDialog(null, "Guess some letters to fid the word");
 		JPanel textHolder = new JPanel();
 		gameFrame.addKeyListener(this);
 		gameFrame.setVisible(true);
@@ -132,7 +132,7 @@ public class Hangman implements KeyListener {
 		String temp2 = lives + "";
 		livesCounter.setText(temp2);
 		if (!underScoresArray.contains('_')) {
-			JOptionPane.showMessageDialog(null, "Game Over//Good job");
+			JOptionPane.showMessageDialog(null, "Guess the new word");
 			wordsReciever.remove(DisplayLine);
 			DisplayLine = wordsReciever.pop();
 			System.out.println(DisplayLine);
