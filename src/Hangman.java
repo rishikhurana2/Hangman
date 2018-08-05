@@ -20,15 +20,14 @@ public class Hangman implements KeyListener {
 	static ArrayList<Character> underScoresArray = new ArrayList<Character>();
 	static Stack<String> wordsReciever = new Stack<String>();
 	static JLabel label = new JLabel();
-	JLabel livesCounter = new JLabel();
+	static JLabel livesCounter = new JLabel();
 	JFrame gameFrame = new JFrame();
 	static String set = "";
 	static String newSet = "";
-	int lives = 15;
+	static int lives = 15;
 
 	public static void main(String[] args) throws IOException {
-		// LineNumberReader lnr = new LineNumberReader(br);
-		String numberString = JOptionPane.showInputDialog("please input a number for the amount of word you want to guess");
+		String numberString = JOptionPane.showInputDialog("Please input a number for the amount of word(s) you want to guess");
 		int number = Integer.parseInt(numberString);
 		ArrayList<String> words = new ArrayList<String>();
 		ArrayList<Integer> indexes = new ArrayList<Integer>();
@@ -58,9 +57,10 @@ public class Hangman implements KeyListener {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		wordsReciever.add("Game Over");
 		h.putInStack(words, wordsReciever);
 		DisplayLine = wordsReciever.pop();
-		System.out.println(DisplayLine);
+		//System.out.println(DisplayLine);
 		for (int i = 0; i < DisplayLine.length(); i++) {
 			set += "_" + " ";
 		}
@@ -74,6 +74,7 @@ public class Hangman implements KeyListener {
 		}
 		h.createUI();
 		underScores = "";
+		livesCounter.setText("Lives: " + lives);
 	}
 
 	public void sort(ArrayList<Integer> indexes) {
@@ -98,7 +99,7 @@ public class Hangman implements KeyListener {
 	}
 
 	public void createUI() {
-		JOptionPane.showMessageDialog(null, "Guess some letters to fid the word");
+		JOptionPane.showMessageDialog(null, "Guess some letters to find the word");
 		JPanel textHolder = new JPanel();
 		gameFrame.addKeyListener(this);
 		gameFrame.setVisible(true);
@@ -106,7 +107,6 @@ public class Hangman implements KeyListener {
 		gameFrame.add(textHolder);
 		textHolder.add(label);
 		textHolder.add(livesCounter);
-
 	}
 
 	@Override
@@ -130,12 +130,14 @@ public class Hangman implements KeyListener {
 		}
 		label.setText(underScores);
 		String temp2 = lives + "";
-		livesCounter.setText(temp2);
+		livesCounter.setText("Lives: " + temp2);
 		if (!underScoresArray.contains('_')) {
 			JOptionPane.showMessageDialog(null, "Guess the new word");
+			lives = 15;
+			livesCounter.setText("Lives: " + lives);
 			wordsReciever.remove(DisplayLine);
 			DisplayLine = wordsReciever.pop();
-			System.out.println(DisplayLine);
+			//System.out.println(DisplayLine);
 			underScoresArray.clear();
 			newSet = "";
 			for (int i = 0; i < DisplayLine.length(); i++) {
@@ -150,8 +152,12 @@ public class Hangman implements KeyListener {
 			}
 		}
 		if (lives <= 0) {
-			JOptionPane.showMessageDialog(null, "Game Over//You ran out of lives");
+			JOptionPane.showMessageDialog(null, "Game Over - You ran out of lives. The word was " + DisplayLine);
 			gameFrame.setVisible(false);
+		}
+		if (DisplayLine.equals("Game Over")) {
+			gameFrame.setVisible(false);
+			JOptionPane.showMessageDialog(null, "You played the amount of words you entered without loosing your lives");
 		}
 		underScores = "";
 	}
